@@ -30,7 +30,7 @@ function App() {
                 <Alerts />
                 <div className="container">
                     <Switch>
-                      <PrivateRoute exact path="/" component={Home} />
+                      <PrivateRoute exact path="/" component={Login} />
                       <Route exact path="/about" component={About} />
                       <Route exact path='/register' component={Register} />
                       <Route exact path='/login' component={Login} />
