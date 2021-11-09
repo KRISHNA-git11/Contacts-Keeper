@@ -1,10 +1,14 @@
 const express = require('express')  // commonjs
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
+const config = require('./config').config;
 const path = require('path')
 const app = express();
 
 // Connect DataBase
-connectDB();
+mongoose.connect(config.mongoURI, {user: config.mongoUser, pass: String(config.mongoPass)},  { useUnifiedTopology: true }).then(
+    () => {console.log('Mongo DB connected');},
+    err => { console.error(err.message); }
+  );
 
 // init middleware
 app.use(express.json({extended:false}));
