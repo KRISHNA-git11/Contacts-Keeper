@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const User = require('../models/Users');
-const config = require('config')
+const config = require('../config')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth')
@@ -52,7 +52,7 @@ router.post('/',[
                 id : user.id
             }
         }
-        jwt.sign(payload,config.get('jwtsecret'),{
+        jwt.sign(payload, toString(config.jwtsecret),{
             expiresIn:36000000
         },(err,token)=>{
             if(err) throw err;
@@ -60,7 +60,7 @@ router.post('/',[
         })
 
     } catch (err) {
-        console.error(err.message);
+        console.error(err);
         res.status(500).send('Server Error')
     }
 })
