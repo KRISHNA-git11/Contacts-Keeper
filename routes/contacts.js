@@ -12,7 +12,7 @@ const Contact = require('../models/Contacts');
 router.get('/',auth,async(req,res)=>{
     try {
         const contacts = await Contact.find({user: req.user.id}).sort({date:-1});
-        res.json(contacts);
+        res.status(200).json(contacts);
     } catch (err) {
         console.error(err.message)
         res.status(500).send("Server error")
@@ -32,7 +32,7 @@ router.post('/',[auth,[
             errors: errors.array()
         })
     }
-    const {name,email,phone,type} = req.body
+    const {name, email, phone, type} = req.body
     try {
         const newContact = new Contact({
             name,
@@ -41,8 +41,9 @@ router.post('/',[auth,[
             type,
             user:req.user.id
         })
-        const contact = await newContact.save()
-        res.json(contact)
+        const saved_contact = await newContact.save()
+        const contact = await Contact.findById(saved_contact._id);
+        res.status(200).json(contact);
     } catch (err) {
         console.error(err.message)
         res.status(500).send("Server Error")
@@ -91,7 +92,7 @@ router.delete('/:id',auth,async (req,res)=>{
             return res.status(401).json({msg:'Unauthorized access'})
         }
         await Contact.findByIdAndRemove(req.params.id)
-        res.json({msg:'Bye bye contact'})
+        res.status(200).json({msg:'Bye bye contact'})
     } 
     catch (err) {
         console.error(err.message)
